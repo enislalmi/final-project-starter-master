@@ -31,76 +31,78 @@ package filters;
  */
 public class Parser {
     private final Scanner scanner;
-    private static final String LPAREN = "(";
-    private static final String RPAREN = ")";
-    private static final String OR = "or";
-    private static final String AND = "and";
-    private static final String NOT = "not";
+    //changed variable names
+    private static final String LEFT_PARANTHESES = "(";
+    private static final String RIGHT_PARANTHESES = ")";
+    private static final String OR_OPERATOR = "or";
+    private static final String AND_OPERATOR = "and";
+    private static final String NOT_OPERATOR = "not";
 
     public Parser(String input) {
         scanner = new Scanner(input);
     }
 
     public Filter parse() throws SyntaxError {
-        Filter ans = expr();
+        Filter answer = expression();
         if (scanner.peek() != null) {
             throw new SyntaxError("Extra stuff at end of input");
         }
-        return ans;
+        return answer;
     }
 
-    private Filter expr() throws SyntaxError {
-        return orexpr();
+    private Filter expression() throws SyntaxError {
+        return or_expression();
     }
 
-    private Filter orexpr() throws SyntaxError {
-        Filter sub = andexpr();
+    private Filter or_expression() throws SyntaxError {
+        Filter sub = and_expression();
         String token = scanner.peek();
-        while (token != null && token.equals(OR)) {
+        while (token != null && token.equals(OR_OPERATOR)) {
             scanner.advance();
-            Filter right = andexpr();
+            Filter right = and_expression();
             // At this point we have two subexpressions ("sub" on the left and "right" on the right)
             // that are to be connected by "or"
             // TODO: Construct the appropriate new Filter object
             // The new filter object should be assigned to the variable "sub"
+            //constructed in OrFilter
+            sub = new OrFilter(sub, right);
             token = scanner.peek();
         }
         return sub;
     }
 
-    private Filter andexpr() throws SyntaxError {
-        Filter sub = notexpr();
+    private Filter and_expression() throws SyntaxError {
+        Filter sub = not_expression();
         String token = scanner.peek();
-        while (token != null && token.equals(AND)) {
+        while (token != null && token.equals(AND_OPERATOR)) {
             scanner.advance();
-            Filter right = notexpr();
+            Filter right = not_expression();
             // At this point we have two subexpressions ("sub" on the left and "right" on the right)
             // that are to be connected by "and"
             // TODO: Construct the appropriate new Filter object
             // The new filter object should be assigned to the variable "sub"
+            sub = new AndFilter(sub, right);
             token = scanner.peek();
         }
         return sub;
     }
 
-    private Filter notexpr() throws SyntaxError {
+    private Filter not_expression() throws SyntaxError {
         String token = scanner.peek();
-        if (token.equals(NOT)) {
+        if (token.equals(NOT_OPERATOR)) {
             scanner.advance();
-            Filter sub = notexpr();
+            Filter sub = not_expression();
             return new NotFilter(sub);
-        } else {
-            Filter sub = prim();
-            return sub;
-        }
+        } //deleted the else that made sub=prim
+        return prim();
     }
 
     private Filter prim() throws SyntaxError {
         String token = scanner.peek();
-        if (token.equals(LPAREN)) {
+        if (token.equals(LEFT_PARANTHESES)) {
             scanner.advance();
-            Filter sub = expr();
-            if (!scanner.peek().equals(RPAREN)) {
+            Filter sub = or_expression();
+            if (!scanner.peek().equals(RIGHT_PARANTHESES)) {
                 throw new SyntaxError("Expected ')'");
             }
             scanner.advance();
