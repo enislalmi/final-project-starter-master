@@ -1,6 +1,7 @@
 package twitter;
 
 import twitter4j.*;
+import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
@@ -24,9 +25,13 @@ public class LiveTwitterSource extends TwitterSource {
         String[] queriesArray = terms.toArray(new String[0]);
         filter.track(queriesArray);
 
-        System.out.println("Syncing live Twitter stream with " + terms);
+        printSync();
 
         twitterStream.filter(filter);
+    }
+
+    private void printSync() {
+        System.out.println("Syncing live Twitter stream with " + terms);
     }
 
     private void initializeListener() {
@@ -44,14 +49,7 @@ public class LiveTwitterSource extends TwitterSource {
     // Create ConfigurationBuilder and pass in necessary credentials to authorize properly, then create TwitterStream.
     // Create ConfigurationBuilder and pass in necessary credentials to authorize properly, then create TwitterStream.
     private void initializeTwitterStream() {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setOAuthConsumerKey("JeE2S8KXWwVp0yEYrKhsv7lUE")
-                .setOAuthConsumerSecret("BhatTGhgfDcJSd4lJRV1Cw6CE1I9MFT8LtzwKkRSNXW042qCmk")
-                .setOAuthAccessToken("1282629240396156929-XA4r8GY6eTSsX1UdfBVklpmwNkfLUr")
-                .setOAuthAccessTokenSecret("IBFbR3d5eeOqXJchVV2o09fuNHLQisNYo2n3qC4PFEccQ");
-
-        // Pass the ConfigurationBuilder in when constructing TwitterStreamFactory.
-        twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+        twitterStream = new TwitterStreamFactory(ConfigurationController.getDefaultConfiguration()).getInstance();
         initializeListener();
         twitterStream.addListener(listener);
     }
