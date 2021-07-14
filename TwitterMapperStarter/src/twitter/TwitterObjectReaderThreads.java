@@ -1,26 +1,24 @@
 package twitter;
 import twitter4j.Status;
-import util.ObjectSource;
+import util.ObjectReader;
+
 
 
 public abstract class TwitterObjectReaderThreads extends Thread {
 
-    private ObjectSource source;
+    private ObjectReader source;
     private double speedup;
     private long playbackStartTime;
     private long recordStartTIme;
 
 
-    public TwitterObjectReaderThreads(Runnable target, ObjectSource source, double speedup, long playbackStartTime, long recordStartTIme) {
-        super(target);
-        this.source = source;
-        this.speedup = speedup;
-        this.playbackStartTime = playbackStartTime;
-        this.recordStartTIme = recordStartTIme;
+
+
+    public TwitterObjectReaderThreads(ObjectReader source, double speedup) {
+        this.source=source;
+        this.speedup=speedup;
     }
 
-    public TwitterObjectReaderThreads(ObjectSource source, double speedup) {
-    }
 
     public void run()
     {

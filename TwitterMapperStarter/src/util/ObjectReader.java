@@ -4,15 +4,17 @@ import java.io.*;
 
 /**
  * Read objects from a file
+ * changed the name from object source to object reader, since we are only using this class to read data,
+ * it may be misleading to call it object source
  */
-public class ObjectSource {
+public class ObjectReader {
     private File file;
-    private ObjectInputStream instream;
+    private ObjectInputStream inputstream;
 
-    public ObjectSource(String filename)  {
+    public ObjectReader(String filename)  {
         file = new File(filename);
         try {
-            instream = new ObjectInputStream(new FileInputStream(file));
+            inputstream = new ObjectInputStream(new FileInputStream(file));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -21,7 +23,7 @@ public class ObjectSource {
     public Object readObject() {
         Object o = null;
         try {
-            o = instream.readObject();
+            o = inputstream.readObject();
         } catch (EOFException e) {
             // Do nothing, EOF is expected to happen eventually
         } catch (IOException e) {
@@ -34,7 +36,7 @@ public class ObjectSource {
 
     public void close() {
         try {
-            instream.close();
+            inputstream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

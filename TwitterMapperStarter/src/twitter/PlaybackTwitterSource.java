@@ -1,7 +1,7 @@
 package twitter;
 
 import twitter4j.Status;
-import util.ObjectSource;
+import util.ObjectReader;
 
 /**
  * A Twitter source that plays back a recorded stream of tweets.
@@ -15,12 +15,12 @@ public class PlaybackTwitterSource extends TwitterSource {
     // The speedup to apply to the recorded stream of tweets; 2 means play at twice the rate
     // at which the tweets were recorded
     private final double speedup;
-    private ObjectSource source;
+    private ObjectReader source;
     private boolean threadStarted = false;
 
     public PlaybackTwitterSource(double speedup) {
         this.speedup = speedup;
-        source = new ObjectSource("data/TwitterCapture.jobj");
+        source = new ObjectReader("data/TwitterCapture.jobj");
 
     }
 
