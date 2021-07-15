@@ -24,11 +24,20 @@ public class AndFilter implements Filter {
     @Override
     public List<String> terms() {
         return new ArrayList<String>() {{
-            addAll(first_child.terms());
-            addAll(second_child.terms());
+            add(listToString(first_child.terms())+ " " + listToString(second_child.terms()));
         }};
     }
 
+    private String listToString(List<String> stringList)
+    {
+        StringBuilder listString = new StringBuilder();
+
+        for(String string: stringList)
+        {
+            listString.append(string);
+        }
+        return listString.toString();
+    }
     public String toString() {
         return "(" + first_child.toString() + " and " + second_child.toString() + ")";
     }

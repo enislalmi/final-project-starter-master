@@ -104,4 +104,10 @@ public class Query implements Observer {
         String profileImageURL = user.getProfileImageURL();
         return new CustomizedMap(getLayer(), coordinate, getColor(), profileImageURL, status.getText());
     }
+    public void terminateQuery() {
+        layer.setVisible(false);
+        for(MapMarkerCircle marker: customMapMarkerList){
+            map.removeMapMarker(marker);
+        }
+    }
 }

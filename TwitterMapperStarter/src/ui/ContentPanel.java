@@ -96,4 +96,77 @@ public class ContentPanel extends JPanel {
     public JMapViewer getViewer() {
         return map;
     }
+
+
+
+    public void addQueryToContentPanel(Query query) {
+        JPanel newQueryPanel = new JPanel();
+        newQueryPanel.setLayout(new GridBagLayout());
+        JPanel colorPanel = createColorPanel(query);
+        JButton removeButton = createRemoveButton(query, newQueryPanel);
+        JCheckBox checkbox = createCheckBox(query);
+        GridBagConstraints c = createGridBagConstraints();
+
+        newQueryPanel.add(colorPanel, c);
+        newQueryPanel.add(checkbox, c);
+        newQueryPanel.add(removeButton);
+
+        existingQueryList.add(newQueryPanel);
+        validate();
+    }
+
+    /**Helper method to create the GridBag and set its constraints
+     * @return a GridBagConstraints object
+     * */
+    private GridBagConstraints createGridBagConstraints() {
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 1.0;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        return c;
+    }
+
+    /**Helpler method to  create the checkboxes and set up the action listener
+     * @param query is the query to be associated with the checkbox
+     * @return a JCheckbox object
+     * */
+    private JCheckBox createCheckBox(Query query) {
+        JCheckBox checkbox = new JCheckBox(query.getQueryString());
+        checkbox.setSelected(true);
+        checkbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                app.updateVisibility();
+            }
+        });
+        query.setCheckBox(checkbox);
+        return checkbox;
+    }
+
+    /**Method to create a Colorpanel
+     * @param query - is the query that will determine the color of the panel
+     * @return a JPanel
+     * */
+    private JPanel createColorPanel(Query query) {
+        JPanel colorPanel = new JPanel();
+        colorPanel.setBackground(query.getColor());
+        colorPanel.setPreferredSize(new Dimension(30, 30));
+        return colorPanel;
+    }
+
+    /**Method to create and set up the RemoveButton
+     * @param query - is the query that will be removed
+     * @param newQueryPanel - is the jpanel where the query will be removed
+     * @return JButton
+     * */
+    private JButton createRemoveButton(Query query, JPanel newQueryPanel) {
+        JButton removeButton = new JButton("X");
+        removeButton.setPreferredSize(new Dimension(30, 20));
+        removeButton.addActionListener(e -> {
+            app.terminateQuery(query);
+            query.terminateQuery();
+            existingQueryList.remove(newQueryPanel);
+            revalidate();
+        });
+        return removeButton;
+    }
 }
