@@ -30,14 +30,15 @@ public class PlaybackTwitterSource extends TwitterSource {
             return;
         }
         threadStarted = true;
-        new TwitterObjectReaderThreads(source, speedup)
-        {
+        new TwitterPlaybackObjectReader(source, speedup) {
 
             @Override
-            public void handleOperation(Status st) {
-                handleTweet(st);
+            public void handleTweetOperation(Status status) {
+                handleTweet(status);
             }
         }.start();
+
+
 
 
 

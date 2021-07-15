@@ -9,7 +9,7 @@ public abstract class TwitterObjectReaderThreads extends Thread {
     private ObjectReader source;
     private double speedup;
     private long playbackStartTime;
-    private long recordStartTIme;
+    private long recordStartTime;
 
 
 
@@ -35,13 +35,13 @@ public abstract class TwitterObjectReaderThreads extends Thread {
             }
 
             long statusTime = (long) time;
-            if (recordStartTIme == 0)
+            if (recordStartTime == 0)
             {
-                recordStartTIme= (long) time;
+                recordStartTime= (long) time;
             }
 
             Status status_twitter = (Status) status;
-           long playbacktime = computeplaybacktime((Long) status);
+           long playbacktime = computeplaybacktime((Long)status);
 
            while((time_now = System.currentTimeMillis())<playbacktime)
            {
@@ -54,7 +54,7 @@ public abstract class TwitterObjectReaderThreads extends Thread {
     }
     private long computeplaybacktime(long timeStatus)
     {
-        long difference_status = timeStatus - recordStartTIme;
+        long difference_status = timeStatus - recordStartTime;
         long diference = Math.round(difference_status/speedup);
         return playbackStartTime+diference;
     }

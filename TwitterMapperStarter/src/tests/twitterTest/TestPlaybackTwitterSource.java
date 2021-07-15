@@ -1,6 +1,6 @@
-package twitter.test;
+package tests.twitterTest;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import twitter.PlaybackTwitterSource;
 import twitter4j.Status;
 
@@ -20,7 +20,7 @@ public class TestPlaybackTwitterSource {
     public void testSetup() {
         PlaybackTwitterSource source = new PlaybackTwitterSource(1.0);
         TestObserver to = new TestObserver();
-        // TODO: Once your TwitterSource class implements Observable, you must add the TestObserver as an observer to it here
+        source.addObserver(to);
         source.setFilterTerms(set("food"));
         pause(3 * 1000);
         assertTrue(to.getNTweets() > 0, "Expected getNTweets() to be > 0, was " + to.getNTweets());
