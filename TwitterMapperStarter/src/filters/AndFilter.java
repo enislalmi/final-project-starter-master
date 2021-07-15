@@ -28,6 +28,7 @@ public class AndFilter implements Filter {
         }};
     }
 
+    //shows all the tweet including both of the keywords with "and"
     private String listToString(List<String> stringList)
     {
         StringBuilder listString = new StringBuilder();
@@ -38,6 +39,7 @@ public class AndFilter implements Filter {
         }
         return listString.toString();
     }
+
     public String toString() {
         return "(" + first_child.toString() + " and " + second_child.toString() + ")";
     }

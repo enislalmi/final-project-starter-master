@@ -104,15 +104,14 @@ public class Application extends JFrame {
         // Use the Bing tile provider
         map().setTileSource(bing);
 
-        //NOTE This is so that the map eventually loads the tiles once Bing attribution is ready.
+
         Coordinate coord = new Coordinate(0, 0);
 
         Timer bingTimer = new Timer();
         TimerTask bingAttributionCheck = new TimerTask() {
             @Override
             public void run() {
-                // This is the best method we've found to determine when the Bing data has been loaded.
-                // We use this to trigger zooming the map so that the entire world is visible.
+
                 if (!bing.getAttributionText(0, coord, coord).equals("Error loading Bing attribution data")) {
                     map().setZoom(2);
                     bingTimer.cancel();
@@ -121,7 +120,7 @@ public class Application extends JFrame {
         };
         bingTimer.schedule(bingAttributionCheck, 100, 200);
 
-        // Set up a motion listener to create a tooltip showing the tweets at the pointer position
+
         map().addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -136,7 +135,7 @@ public class Application extends JFrame {
 
                     String profilePictureURL = customMapMarker.getProfilePhotoURL();
 
-
+                    //this is how i have changed the way markers are shown
                     map().setToolTipText("<html><img src=" + profilePictureURL + " height=\"60\" width=\"60\"> <br>" +
                             "<h3>" + tweet + " </h3> </html>");
                 }

@@ -1,4 +1,4 @@
-package filters.test;
+package tests.ParserFilters;
 
 import filters.*;
 import org.junit.jupiter.api.Test;

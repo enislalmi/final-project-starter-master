@@ -1,4 +1,4 @@
-package util.test;
+package tests.Image;
 
 import org.junit.jupiter.api.Test;
 import util.Util;

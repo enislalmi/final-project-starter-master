@@ -47,8 +47,6 @@ public class LiveTwitterSource extends TwitterSource {
         };
     }
 
-    // Create ConfigurationBuilder and pass in necessary credentials to authorize properly, then create TwitterStream.
-    // Create ConfigurationBuilder and pass in necessary credentials to authorize properly, then create TwitterStream.
     private void initializeTwitterStream() {
         twitterStream = new TwitterStreamFactory(ConfigurationController.getDefaultConfiguration()).getInstance();
         initializeListener();

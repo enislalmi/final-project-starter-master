@@ -38,10 +38,6 @@ public class PlaybackTwitterSource extends TwitterSource {
             }
         }.start();
 
-
-
-
-
     }
 
     /**

@@ -1,4 +1,4 @@
-package tests.twitterTest;
+package tests.Twitter;
 
 import org.junit.Test;
 import twitter.PlaybackTwitterSource;
