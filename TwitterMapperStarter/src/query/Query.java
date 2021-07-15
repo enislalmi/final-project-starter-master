@@ -83,9 +83,8 @@ public class Query implements Observer {
     }
 
     public void terminate() {
-        for (MapMarkerCircle mapMarker : customMapMarkerList) {
-            map.removeMapMarker(mapMarker);
-        }
+
+        customMapMarkerList.forEach(map::removeMapMarker);
     }
 
     @Override
@@ -104,10 +103,9 @@ public class Query implements Observer {
         String profileImageURL = user.getProfileImageURL();
         return new CustomizedMap(getLayer(), coordinate, getColor(), profileImageURL, status.getText());
     }
+
     public void terminateQuery() {
         layer.setVisible(false);
-        for(MapMarkerCircle marker: customMapMarkerList){
-            map.removeMapMarker(marker);
-        }
+        customMapMarkerList.forEach(map::removeMapMarker);
     }
 }
