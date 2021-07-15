@@ -41,6 +41,7 @@ public class LiveTwitterSource extends TwitterSource {
                 // This method is called each time a tweet is delivered by the twitter API
                 if (status.getPlace() != null) {
                     handleTweet(status);
+                    System.out.println(status.getText());
                 }
            }
         };

@@ -31,9 +31,8 @@ package filters;
  */
 public class Parser {
     private final Scanner scanner;
-    //changed variable names
-    private static final String LEFT_PARANTHESES = "(";
-    private static final String RIGHT_PARANTHESES = ")";
+    private static final String LEFT_PARENTHESIS = "(";
+    private static final String RIGHT_PARENTHESIS = ")";
     private static final String OR_OPERATOR = "or";
     private static final String AND_OPERATOR = "and";
     private static final String NOT_OPERATOR = "not";
@@ -43,15 +42,11 @@ public class Parser {
     }
 
     public Filter parse() throws SyntaxError {
-        Filter answer = expression();
+        Filter answer = or_expression();
         if (scanner.peek() != null) {
             throw new SyntaxError("Extra stuff at end of input");
         }
         return answer;
-    }
-
-    private Filter expression() throws SyntaxError {
-        return or_expression();
     }
 
     private Filter or_expression() throws SyntaxError {
@@ -60,11 +55,6 @@ public class Parser {
         while (token != null && token.equals(OR_OPERATOR)) {
             scanner.advance();
             Filter right = and_expression();
-            // At this point we have two subexpressions ("sub" on the left and "right" on the right)
-            // that are to be connected by "or"
-            // TODO: Construct the appropriate new Filter object
-            // The new filter object should be assigned to the variable "sub"
-            //constructed in OrFilter
             sub = new OrFilter(sub, right);
             token = scanner.peek();
         }
@@ -77,10 +67,6 @@ public class Parser {
         while (token != null && token.equals(AND_OPERATOR)) {
             scanner.advance();
             Filter right = not_expression();
-            // At this point we have two subexpressions ("sub" on the left and "right" on the right)
-            // that are to be connected by "and"
-            // TODO: Construct the appropriate new Filter object
-            // The new filter object should be assigned to the variable "sub"
             sub = new AndFilter(sub, right);
             token = scanner.peek();
         }
@@ -93,24 +79,26 @@ public class Parser {
             scanner.advance();
             Filter sub = not_expression();
             return new NotFilter(sub);
-        } //deleted the else that made sub=prim
+        } //deleted the whole else as it returned the same thing as prim
         return prim();
+
     }
 
-    private Filter prim() throws SyntaxError {
+    private Filter prim() throws  SyntaxError {
         String token = scanner.peek();
-        if (token.equals(LEFT_PARANTHESES)) {
+        if (token.equals(LEFT_PARENTHESIS)) {
             scanner.advance();
             Filter sub = or_expression();
-            if (!scanner.peek().equals(RIGHT_PARANTHESES)) {
+            if (!scanner.peek().equals(RIGHT_PARENTHESIS)) {
                 throw new SyntaxError("Expected ')'");
             }
             scanner.advance();
             return sub;
-        } else {
-            Filter sub = new BasicFilter(token);
-            scanner.advance();
-            return sub;
         }
+
+        Filter sub = new BasicFilter(token);
+        scanner.advance();
+        return sub;
+
     }
 }

@@ -15,30 +15,30 @@ public class ObjectReader {
         file = new File(filename);
         try {
             inputstream = new ObjectInputStream(new FileInputStream(file));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException excection) {
+            excection.printStackTrace();
         }
     }
 
     public Object readObject() {
-        Object o = null;
+        Object obj = null;
         try {
-            o = inputstream.readObject();
-        } catch (EOFException e) {
+            obj = inputstream.readObject();
+        } catch (EOFException excection) {
             // Do nothing, EOF is expected to happen eventually
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException excection) {
+            excection.printStackTrace();
+        } catch (ClassNotFoundException excection) {
+            excection.printStackTrace();
         }
-        return o;
+        return obj;
     }
 
     public void close() {
         try {
             inputstream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }

@@ -2,34 +2,34 @@ package filters;
 
 import twitter4j.Status;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AndFilter implements Filter {
-    private final Filter left_side;
-    private final Filter right_side;
 
-    public AndFilter(Filter left_side, Filter right_side) {
-        this.left_side = left_side;
-        this.right_side = right_side;
+    private final Filter first_child;
+    private final Filter second_child;
+
+    public AndFilter(Filter first_child, Filter second_child) {
+        this.first_child = first_child;
+        this.second_child = second_child;
     }
 
-
+    //changed s to status
     @Override
     public boolean matches(Status status) {
-        return left_side.matches(status) && right_side.matches(status);
+        return first_child.matches(status) && second_child.matches(status);
     }
 
     @Override
     public List<String> terms() {
-        List<String> terms = left_side.terms();
-        terms().addAll(right_side.terms());
-        return terms;
+        return new ArrayList<String>() {{
+            addAll(first_child.terms());
+            addAll(second_child.terms());
+        }};
     }
 
-    @Override
-    public String toString()
-    {
-        String string = "(" + left_side.toString() + "and" + right_side.toString() + ")";
-        return string;
+    public String toString() {
+        return "(" + first_child.toString() + " and " + second_child.toString() + ")";
     }
 }

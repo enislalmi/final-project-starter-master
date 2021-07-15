@@ -7,8 +7,10 @@ import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import query.Query;
+import twitter.LiveTwitterSource;
 import twitter.PlaybackTwitterSource;
 import twitter.TwitterSource;
+import ui.custom.CustomizedMap;
 import util.SphericalGeometry;
 
 import javax.swing.*;
@@ -27,7 +29,7 @@ public class Application extends JFrame {
     // The content panel, which contains the entire UI
     private final ContentPanel contentPanel;
     // The provider of the tiles for the map, we use the Bing source
-    private BingAerialTileSource bing;
+    private final BingAerialTileSource bing;
     // All of the active queries
     private List<Query> queries = new ArrayList<>();
     // The source of tweets, a TwitterSource, either live or playback
@@ -35,33 +37,37 @@ public class Application extends JFrame {
 
     private void initialize() {
         // To use the live twitter stream, use the following line
-        // twitterSource = new LiveTwitterSource();
+        twitterSource = new LiveTwitterSource();
 
         // To use the recorded twitter stream, use the following line
         // The number passed to the constructor is a speedup value:
         //  1.0 - play back at the recorded speed
         //  2.0 - play back twice as fast
-        twitterSource = new PlaybackTwitterSource(60.0);
+        //twitterSource = new PlaybackTwitterSource(60.0);
 
         queries = new ArrayList<>();
     }
 
     /**
      * A new query has been entered via the User Interface
-     * @param   query   The new query object
+     *
+     * @param query The new query object
      */
     public void addQuery(Query query) {
         queries.add(query);
         Set<String> allterms = getQueryTerms();
         twitterSource.setFilterTerms(allterms);
         contentPanel.addQuery(query);
+
+        twitterSource.addObserver(query);
         // TODO: This is the place where you should connect the new query to the twitter source
     }
 
     /**
      * return a list of all terms mentioned in all queries. The live twitter source uses this
      * to request matching tweets from the Twitter API.
-     * @return
+     *
+     * @return ans
      */
     private Set<String> getQueryTerms() {
         Set<String> ans = new HashSet<>();
@@ -121,8 +127,19 @@ public class Application extends JFrame {
             public void mouseMoved(MouseEvent e) {
                 Point p = e.getPoint();
                 ICoordinate pos = map().getPosition(p);
-                // TODO: Use the following method to set the text that appears at the mouse cursor
-                map().setToolTipText("This is a tooltip");
+                List<MapMarker> markerList = getMarkersCovering(pos, pixelWidth(p));
+                if (!markerList.isEmpty()) {
+
+                    MapMarker m = markerList.get(markerList.size() - 1);
+                    CustomizedMap customMapMarker = (CustomizedMap) m;
+                    String tweet = customMapMarker.getTweet();
+
+                    String profilePictureURL = customMapMarker.getProfilePhotoURL();
+
+
+                    map().setToolTipText("<html><img src=" + profilePictureURL + " height=\"60\" width=\"60\"> <br>" +
+                            "<h3>" + tweet + " </h3> </html>");
+                }
             }
         });
     }
@@ -173,16 +190,15 @@ public class Application extends JFrame {
 
     // Update which queries are visible after any checkBox has been changed
     public void updateVisibility() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                System.out.println("Recomputing visible queries");
-                for (Query q : queries) {
-                    JCheckBox box = q.getCheckBox();
-                    Boolean state = box.isSelected();
-                    q.setVisible(state);
-                }
-                map().repaint();
+        //replaced Runnable with lambda
+        SwingUtilities.invokeLater(() -> {
+            System.out.println("Recomputing visible queries");
+            for (Query q : queries) {
+                JCheckBox box = q.getCheckBox();
+                Boolean state = box.isSelected();
+                q.setVisible(state);
             }
+            map().repaint();
         });
     }
 

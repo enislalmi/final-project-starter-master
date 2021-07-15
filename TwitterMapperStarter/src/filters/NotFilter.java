@@ -16,12 +16,12 @@ public class NotFilter implements Filter {
 
     /**
      * A not filter matches when its child doesn't, and vice versa
-     * @param s     the tweet to check
+     * @param status     the tweet to check
      * @return      whether or not it matches
      */
     @Override
-    public boolean matches(Status s) {
-        return !child.matches(s);
+    public boolean matches(Status status) {
+        return !child.matches(status);
     }
 
     @Override

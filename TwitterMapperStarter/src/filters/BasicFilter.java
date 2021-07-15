@@ -3,7 +3,6 @@ package filters;
 import twitter4j.Status;
 
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -19,11 +18,10 @@ public class BasicFilter implements Filter {
         pattern = Pattern.compile("(?i).*" + Pattern.quote(word) + ".*");
     }
 
-    //changed s to status
     @Override
-    public boolean matches(Status status) {
-        //String text = status.getText();
-        return pattern.matcher(status.getText()).matches();
+    public boolean matches(Status s) {
+        String text = s.getText();
+        return pattern.matcher(text).matches();
     }
 
     @Override
