@@ -17,10 +17,10 @@ public class NewQueryPanel extends JPanel {
     private final JTextField newQuery = new JTextField(10);
     private final JLabel queryLabel = new JLabel("Enter Search: ");
     private final JPanel colorSetter;
-    private final Application app;
+    private final ApplicationFacade app;
     private Random random;
 
-    public NewQueryPanel(Application app) {
+    public NewQueryPanel(ApplicationFacade app) {
         this.app = app;
         this.colorSetter = new JPanel();
 
